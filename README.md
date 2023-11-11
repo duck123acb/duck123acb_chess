@@ -1,5 +1,5 @@
 # StoneFish
-My chess engine written in [Rust](https://www.rust-lang.org). Still a WIP
+My first chess engine written in [Rust](https://www.rust-lang.org). Still a WIP
 
 # Details
 - Am currently working on [Board Representation](https://www.chessprogramming.org/Board_Representation)
