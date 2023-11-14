@@ -16,7 +16,7 @@ struct bitboards {
 }
 
 fn load_fen(fen: String) {
-				
+	
 }
 
 fn update_bitboards() {
