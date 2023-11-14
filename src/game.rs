@@ -15,17 +15,17 @@ struct bitboards {
 	black_all: u64,
 }
 
-fn load_fen(fen: String) {
-	
+pub fn load_fen(fen: &str) {
+	println!("{}", fen);
 }
 
-fn update_bitboards() {
+pub fn update_bitboards() {
 
 }
 
-fn make_move() {
+pub fn make_move() {
 
 }
-fn undo_move() {
+pub fn undo_move() {
 
 }
