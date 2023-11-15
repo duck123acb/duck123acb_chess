@@ -9,7 +9,7 @@ My first chess engine written in [Rust](https://www.rust-lang.org). Still a WIP
 
 # Credits
 A list of very useful resources I used:
-- [Bitboards - The Concept Of](https://youtu.be/a5IGltn95Bk?si=m6fdw1DBv5OiO81A)
+- [Bitboards (The Concept Of) - Advanced Java Chess Engine Tutorial 1](https://youtu.be/a5IGltn95Bk?si=m6fdw1DBv5OiO81A)
 - [Coding Adventure: Chess](https://youtube.com/playlist?list=PLFt_AvWsXl0cvHyu32ajwh2qU1i6hl77c&si=Ejmr7Q3CC86sO7HN)
 - [The Fascinating Programming of a Chess Engine](https://www.youtube.com/watch?v=w4FFX_otR-4)
 - [Bitboard CHESS ENGINE in C](https://youtube.com/playlist?list=PLmN0neTso3Jxh8ZIylk74JpwfiWNI76Cs&si=2n_NLOHU5_thE6xP)
