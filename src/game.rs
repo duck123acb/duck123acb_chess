@@ -1,4 +1,4 @@
-struct bitboards {
+struct Bitboards {
 	white_pawns: u64,
 	white_rooks: u64,
 	white_knights: u64,
@@ -15,6 +15,14 @@ struct bitboards {
 	black_all: u64,
 }
 
+pub struct Info {
+	white_can_castle_kingside: bool,
+	white_can_castle_queenside: bool,
+	black_can_castle_kingside: bool,
+	black_can_castle_queenside: bool,
+	// game_end: e
+}
+
 pub fn load_fen(fen: &str) {
 	println!("{}", fen);
 }
@@ -23,7 +31,7 @@ pub fn update_bitboards() {
 
 }
 
-pub fn make_move() {
+pub fn make_move(coordinate_one: &str, coordinate_two: &str) {
 
 }
 pub fn undo_move() {
