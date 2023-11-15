@@ -16,11 +16,15 @@ struct Bitboards {
 }
 
 pub struct Info {
+	bitboards: Bitboards,
+	whites_turn: bool,
 	white_can_castle_kingside: bool,
 	white_can_castle_queenside: bool,
 	black_can_castle_kingside: bool,
 	black_can_castle_queenside: bool,
-	// game_end: e
+	en_passent_coordinate: &str,
+	moves_since_capture_or_pawn_push: u32,
+	turns: u32
 }
 
 pub fn load_fen(fen: &str) {
