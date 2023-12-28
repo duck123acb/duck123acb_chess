@@ -1,5 +1,5 @@
-# StoneFish
-My first chess engine written in [Rust](https://www.rust-lang.org). Still a WIP 
+# stone_fish
+My first chess engine written in [Rust](https://www.rust-lang.org). Still a WIP <br>
 [Lichess Bot account](https://lichess.org/@/StoneFish-BOT)
 
 # Details
@@ -14,6 +14,7 @@ A list of very useful resources I used:
 - [Coding Adventure: Chess](https://youtube.com/playlist?list=PLFt_AvWsXl0cvHyu32ajwh2qU1i6hl77c&si=Ejmr7Q3CC86sO7HN)
 - [The Fascinating Programming of a Chess Engine](https://www.youtube.com/watch?v=w4FFX_otR-4)
 - [Bitboard CHESS ENGINE in C](https://youtube.com/playlist?list=PLmN0neTso3Jxh8ZIylk74JpwfiWNI76Cs&si=2n_NLOHU5_thE6xP)
+- [FEN - Chess Terms](https://www.chess.com/terms/fen-chess)
 - [Lichess-Bot](https://github.com/lichess-bot-devs/lichess-bot)
 - [Chess Programming Wiki](https://www.chessprogramming.org/Main_Page)
 - [Lichess](https://lichess.org)
