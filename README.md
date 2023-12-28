@@ -1,4 +1,4 @@
-# StoneFish
+# stone_fish
 My first chess engine written in [Rust](https://www.rust-lang.org). Still a WIP <br>
 [Lichess Bot account](https://lichess.org/@/StoneFish-BOT)
 
