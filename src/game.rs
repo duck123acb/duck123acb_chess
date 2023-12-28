@@ -89,6 +89,7 @@ impl Board {
 		attacks
 	}
 
+	// TODO: move helper functions into a bitboard_utilty module
 	fn get_shift_mask(&self, shift: u64, direction: i32) -> u64 {
 		// Helper function to get a shift mask based on direction
 		if direction == 1 {
@@ -99,7 +100,6 @@ impl Board {
 			0
 		}
 	}
-
 	fn get_square_list(&self, bitboard: u64) -> Vec<u32> {
 		// Helper function to get a list of squares from a bitboard
 		(0..64).filter(|&square| (bitboard >> square) & 1 != 0).collect()
