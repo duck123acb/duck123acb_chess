@@ -1,6 +1,7 @@
 mod game;
 
 fn main() {
-    // TODO: basic UCI interface
-    game::load_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+    let board = game::Board::new();
+    let occupancy = board.black_bishops;
+    board.generate_sliding_moves(board.white_rooks, occupancy, vec![1, -1]);
 }
