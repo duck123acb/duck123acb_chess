@@ -2,9 +2,15 @@ mod game;
 
 fn main() {
     let board = game::Board::new();
-    // let rook = 
-    let occupancy = board.all_black_piece_bitboard() | (board.all_white_piece_bitboard() );
-    board.generate_sliding_moves(board.white_rooks, occupancy, vec![1, -1]);
+    board.generate_sliding_moves(board.white_rooks, true, false);
 
+    let x = 65280u64;
 
+    let mut i = 0;
+    let mut zeroes = "".to_string();
+    while i < x.leading_zeros() {
+        zeroes += "0";
+        i += 1;
+    }
+    println!("{}{:b}", zeroes, x);
 }

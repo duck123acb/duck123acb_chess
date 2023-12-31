@@ -1,3 +1,4 @@
+//TODO: #[allow(dead_code)] when done, for now it's still useful
 pub struct Ply { // a ply is a half-move in Chess. One 
 	start_square: String,
 	end_square: String,
@@ -5,23 +6,23 @@ pub struct Ply { // a ply is a half-move in Chess. One
 }
 
 pub struct Board {
-pub	white_pawns: u64,
-pub	white_rooks: u64,
-pub	white_knights: u64,
-pub	white_bishops: u64,
-pub	white_queens: u64,
-pub	white_king: u64,
+	pub white_pawns: u64,
+	pub white_rooks: u64,
+	pub white_knights: u64,
+	pub white_bishops: u64,
+	pub white_queens: u64,
+	pub white_king: u64,
 	
-pub	black_pawns: u64,
-pub	black_rooks: u64,
-pub	black_knights: u64,
-pub	black_bishops: u64,
-pub	black_queens: u64,
-pub	black_king: u64,
+	pub black_pawns: u64,
+	pub black_rooks: u64,
+	pub black_knights: u64,
+	pub black_bishops: u64,
+	pub black_queens: u64,
+	pub black_king: u64,
 
-pub	whites_turn: bool,
-pub	castling_rights: String,
-pub	en_passent_coordinates: u64 // to know if there is en passent on the board somewhere
+	pub whites_turn: bool,
+	pub castling_rights: String,
+	pub en_passent_coordinates: u64 // to know if there is en passent on the board somewhere
 }
 
 impl Board {
@@ -62,33 +63,43 @@ impl Board {
 		self.black_pawns | self.black_rooks | self.black_knights | self.black_bishops | self.black_queens | self.black_king
 	}
 
-	// all the generated moves are for a given occupency. Elsewhere I would need to loop over the 64 squares and precomile this data for a lookup table
-
- 	pub fn generate_sliding_moves(&self, piece_bitboard: u64, occupancy: u64, directions: Vec<i32>) -> Vec<u32>{
+	// all the generated moves are for a given square. Elsewhere I would need to loop over the 64 squares and precomile this data for a lookup table
+ 	pub fn generate_sliding_moves(&self, piece_bitboard: u64, orthagonal: bool, diagonal: bool) -> Vec<u32>{
 		let mut moves = Vec::new();
+		let is_piece_white = piece_bitboard & self.all_white_piece_bitboard() != 0;
+		let friendly_bitboard = if is_piece_white { self.all_white_piece_bitboard() } else { self.all_black_piece_bitboard() };
+		let enemy_bitboard = if is_piece_white { self.all_black_piece_bitboard() } else { self.all_white_piece_bitboard() };
 
-    for &direction in &directions {
-	    let attacks = self.sliding_attacks(piece_bitboard, occupancy, direction);
-	    moves.extend(self.get_square_list(attacks));
-    }
+		if orthagonal {
+			let orthagonal_directions = [1, -1, 8, -1]; // 1 is left, -1 is right, 8 is up, -8 is down
+			for &direction in &orthagonal_directions {
+				let attacks = self.attacks_in_a_direction(piece_bitboard, friendly_bitboard, enemy_bitboard, direction);
+				moves.extend(self.get_square_list(attacks));
+			}
+		}
+		if diagonal {
+			let diagonal_directions = [9, -9, 7, -7]; // 7 is up-right, -7 is down-right, 9 is up-left, -9 is down-left
+			for &direction in &diagonal_directions {
+				let attacks = self.attacks_in_a_direction(piece_bitboard, friendly_bitboard, enemy_bitboard, direction);
+				moves.extend(self.get_square_list(attacks));
+			}
+		}
 
     moves
 	}
-	fn sliding_attacks(&self, piece_bitboard: u64, occupancy: u64, direction: i32) -> u64 { // FIXME: assumes every piece is an enemy piece
+	fn attacks_in_a_direction(&self, piece_bitboard: u64, friendly_occupency: u64, enemy_occupancy: u64, direction: i32) -> u64 {
 		let mut attacks = 0;
 
 		for shift in 1..8 {
-			let shift_mask = self.get_shift_mask(shift, direction);
-			let new_square = piece_bitboard << shift * (direction as u64);
+			let new_square = piece_bitboard << shift * (direction as u64); // FIXME: sometimes when shifting, it overflows. This happens when we go out of bounds of the board; this in turn creates a number larger than 64 bits
 
-			if new_square >= 0x8000_0000_0000_0000 {
-				break;  // Out of board bounds
+			if friendly_occupency & new_square != 0 { // check
+				break;
 			}
 
-			attacks |= new_square & shift_mask;
-
-			// Check if the square is occupied by another piece
-			if occupancy & new_square != 0 {
+			attacks |= new_square;
+			
+			if enemy_occupancy & new_square != 0 { // check if the square is occupied by an enemy piece. Enemy pieces are capturable
 				break;
 			}
 		}
@@ -98,7 +109,7 @@ impl Board {
 
 	// TODO: move helper functions into a bitboard_utilty module
 	fn get_shift_mask(&self, shift: u64, direction: i32) -> u64 {
-		// Helper function to get a shift mask based on direction
+		// helper function to get a shift mask based on direction
 		if direction == 1 {
 			1 << shift
 		} else if direction == -1 {
@@ -108,7 +119,7 @@ impl Board {
 		}
 	}
 	fn get_square_list(&self, bitboard: u64) -> Vec<u32> {
-		// Helper function to get a list of squares from a bitboard
+		// helper function to get a list of squares from a bitboard
 		(0..64).filter(|&square| (bitboard >> square) & 1 != 0).collect()
 	}
 }
