@@ -55,6 +55,13 @@ impl Board {
 
 	}
 
+	pub fn all_white_piece_bitboard(&self) -> u64 {
+		self.white_pawns | self.white_rooks | self.white_knights | self.white_bishops | self.white_queens | self.white_king
+	}
+	pub fn all_black_piece_bitboard(&self) -> u64 {
+		self.black_pawns | self.black_rooks | self.black_knights | self.black_bishops | self.black_queens | self.black_king
+	}
+
 	// all the generated moves are for a given occupency. Elsewhere I would need to loop over the 64 squares and precomile this data for a lookup table
 
  	pub fn generate_sliding_moves(&self, piece_bitboard: u64, occupancy: u64, directions: Vec<i32>) -> Vec<u32>{
