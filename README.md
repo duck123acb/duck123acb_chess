@@ -1,6 +1,6 @@
-# stone_fish
+# duck123acb_chess
 My first chess engine written in [Rust](https://www.rust-lang.org). Still a WIP <br>
-[Lichess Bot account](https://lichess.org/@/StoneFish-BOT)
+[Lichess Bot account](https://lichess.org/@/duck123acb_bot) // still need to make it a bot account
 
 # Details
 - Am currently working on [Board Representation](https://www.chessprogramming.org/Board_Representation)
