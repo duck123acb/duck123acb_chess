@@ -2,7 +2,7 @@ mod game;
 
 fn main() {
     let board = game::Board::new();
-    board.generate_sliding_moves(board.white_rooks, true, false);
+    board.generate_sliding_moves(board.bitboards.white_rooks, true, false); // TODO: change piece_bitboard input
 
     let x = 65280u64;
 
