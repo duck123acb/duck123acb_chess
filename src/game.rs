@@ -18,18 +18,15 @@ pub struct Move { // TODO: change MovePiece struct to involve integers
 }
 
 enum Piece {
-	WhitePawn,
-	WhiteRook,
-	WhiteKnight,
-	WhiteBishop,
-	WhiteQueen,
-	WhiteKing,
-	BlackPawn,
-	BlackRook,
-	BlackKnight,
-	BlackBishop,
-	BlackQueen,
-	BlackKing
+	Pawn,
+	Rook,
+	Knight,
+	Bishop,
+	Queen,
+	King
+}
+enum Colour {
+	
 }
 enum CastlingType {
 	Kingside,
@@ -176,7 +173,7 @@ impl Board {
 			moves.push(piece_move);
 
 			temp_bitboard &= temp_bitboard - 1; // clear the least significant set bit for the next iteration
-	}
+		}
 
 		moves
 	}
