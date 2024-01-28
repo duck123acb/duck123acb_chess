@@ -1,4 +1,3 @@
-//TODO: #[allow(dead_code)] when done, for now it's still useful
 pub struct Move {
 	start_square: u64,
 	end_square: u64,
@@ -55,12 +54,11 @@ pub struct Board {
 	pub bitboards: [u64; 12],
 
 	pub whites_turn: bool,
-	pub castling_rights: String,
+	pub castling_rights: String, // TODO: when implementing castling, fix this type
 	pub en_passent_coordinates: u64 // to know if there is en passent on the board somewhere
 }
 impl Board {
 	pub fn new() -> Board {
-
 		return Board { // starting properties
 			bitboards: [
 				65280, // white pawns
@@ -84,6 +82,7 @@ impl Board {
 		}
 	}
 
+	// TODO: do we need this to be public?
 	pub fn all_white_piece_bitboard(&self) -> u64 {
 		self.bitboards[PieceType::WhitePawn as usize] | self.bitboards[PieceType::WhiteRook as usize] | self.bitboards[PieceType::WhiteKnight as usize] | self.bitboards[PieceType::WhiteBishop as usize] | self.bitboards[PieceType::WhiteQueen as usize] | self.bitboards[PieceType::WhiteKing as usize]
 	}
@@ -91,7 +90,6 @@ impl Board {
 		self.bitboards[PieceType::BlackPawn as usize] | self.bitboards[PieceType::BlackRook as usize] | self.bitboards[PieceType::BlackKnight as usize] | self.bitboards[PieceType::BlackBishop as usize] | self.bitboards[PieceType::BlackQueen as usize] | self.bitboards[PieceType::BlackKing as usize]
 	}
 
-	
 	pub fn make_move(&self, ply: Move) {
 		/*
 		move piece on square one to square two
@@ -111,10 +109,10 @@ impl Board {
 
 	}
 
-	// all the generated moves are for a given square. Elsewhere I would need to loop over the 64 squares and precomile this data for a lookup table
- 	pub fn generate_sliding_moves(&self, piece_bitboard: u64, orthagonal: bool, diagonal: bool) -> Vec<Move>{
+	// all the generated moves are for a given square. Elsewhere I would need to loop over the 64 squares and precompile this data for a lookup table
+ 	fn generate_sliding_moves(&self, piece_bitboard: u64, orthagonal: bool, diagonal: bool) -> Vec<Move>{
 		let mut moves = Vec::new();
-		let is_piece_white = piece_bitboard & self.all_white_piece_bitboard() != 0;
+		let is_piece_white = piece_bitboard & self.all_white_piece_bitboard() != 0; // to determine friends and enemies
 		let friendly_bitboard = if is_piece_white { self.all_white_piece_bitboard() } else { self.all_black_piece_bitboard() };
 		let enemy_bitboard = if is_piece_white { self.all_black_piece_bitboard() } else { self.all_white_piece_bitboard() };
 
@@ -122,32 +120,32 @@ impl Board {
 			const ORTHAGONAL_DIRECTIONS: [i32; 4] = [1, -1, 8, -1]; // 1 is left, -1 is right, 8 is up, -8 is down
 			for &direction in &ORTHAGONAL_DIRECTIONS {
 				let attacks = self.attacks_in_a_direction(piece_bitboard, friendly_bitboard, enemy_bitboard, direction);
-				moves.extend(self.get_sliding_move_list(piece_bitboard, attacks));
+				moves.extend(self.get_sliding_move_list(piece_bitboard, attacks)); // add attacks to the possible moves
 			}
 		}
 		if diagonal {
 			const DIAGONAL_DIRECTIONS: [i32; 4] = [9, -9, 7, -7]; // 7 is up-right, -7 is down-right, 9 is up-left, -9 is down-left
 			for &direction in &DIAGONAL_DIRECTIONS {
 				let attacks = self.attacks_in_a_direction(piece_bitboard, friendly_bitboard, enemy_bitboard, direction);
-				moves.extend(self.get_sliding_move_list(piece_bitboard, attacks));
+				moves.extend(self.get_sliding_move_list(piece_bitboard, attacks)); // add attacks to the possible moves
 			}
 		}
 
     moves
 	}
-	fn attacks_in_a_direction(&self, piece_bitboard: u64, friendly_occupency: u64, enemy_occupancy: u64, direction: i32) -> u64 {
+	fn attacks_in_a_direction(&self, piece_bitboard: u64, friendly_occupency: u64, enemy_occupancy: u64, direction: i32) -> u64 { // returns a bitboard with all the squares it attacks
 		let mut attacks = 0;
 
 		for shift in 1..8 {
 			let new_square = piece_bitboard << shift * (direction as u64); // FIXME: sometimes when shifting, it overflows. This happens when we go out of bounds of the board; this in turn creates a number larger than 64 bits
 
-			if friendly_occupency & new_square != 0 { // check
+			if friendly_occupency & new_square != 0 { // stop the search before adding a capture of a friendly piece
 				break;
 			}
 
 			attacks |= new_square;
 			
-			if enemy_occupancy & new_square != 0 { // check if the square is occupied by an enemy piece. Enemy pieces are capturable
+			if enemy_occupancy & new_square != 0 { // stop the search after adding a capture of an enemy piece
 				break;
 			}
 		}
@@ -169,7 +167,7 @@ impl Board {
 			};
 
 			for piece_type in PieceType::iter() { // get captured piece
-				if self.bitboards[piece_type as usize] & piece_move.end_square != 0 {
+				if self.bitboards[piece_type as usize] & piece_move.end_square != 0 { // if any piece is in the end square, it would be a capture
 					piece_move.captured_piece = Some(piece_type);
 					break;
 				}
