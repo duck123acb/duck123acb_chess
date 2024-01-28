@@ -122,14 +122,14 @@ impl Board {
 			const ORTHAGONAL_DIRECTIONS: [i32; 4] = [1, -1, 8, -1]; // 1 is left, -1 is right, 8 is up, -8 is down
 			for &direction in &ORTHAGONAL_DIRECTIONS {
 				let attacks = self.attacks_in_a_direction(piece_bitboard, friendly_bitboard, enemy_bitboard, direction);
-				moves.extend(self.get_move_list(piece_bitboard, attacks));
+				moves.extend(self.get_sliding_move_list(piece_bitboard, attacks));
 			}
 		}
 		if diagonal {
 			const DIAGONAL_DIRECTIONS: [i32; 4] = [9, -9, 7, -7]; // 7 is up-right, -7 is down-right, 9 is up-left, -9 is down-left
 			for &direction in &DIAGONAL_DIRECTIONS {
 				let attacks = self.attacks_in_a_direction(piece_bitboard, friendly_bitboard, enemy_bitboard, direction);
-				moves.extend(self.get_move_list(piece_bitboard, attacks));
+				moves.extend(self.get_sliding_move_list(piece_bitboard, attacks));
 			}
 		}
 
@@ -154,8 +154,7 @@ impl Board {
 
 		attacks
 	}
-
-	fn get_move_list(&self, piece_bitboard: u64, piece_attacks: u64) -> Vec<Move> {
+	fn get_sliding_move_list(&self, piece_bitboard: u64, piece_attacks: u64) -> Vec<Move> {
 		let mut temp_bitboard = piece_attacks;
 		let mut moves: Vec<Move> = vec![];
 		
@@ -164,9 +163,9 @@ impl Board {
 				start_square: piece_bitboard,
 				end_square: 1 << temp_bitboard.trailing_zeros(), // the least signifigant bit,
 				captured_piece: None,
-				promoted_piece: None, // TODO: handle promotions
-				en_passent: false, // TODO: handle en passent,
-				castling: None // TODO: handle castling
+				promoted_piece: None,
+				en_passent: false,
+				castling: None
 			};
 
 			for piece_type in PieceType::iter() { // get captured piece
