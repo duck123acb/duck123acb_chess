@@ -1,16 +1,8 @@
-mod game;
+mod board_representation;
 
 fn main() {
-    let board = game::Board::new();
-    board.generate_sliding_moves(board.bitboards.white_rooks, true, false); // TODO: change piece_bitboard input
+    let board = board_representation::Board::new();
+    let board_bits = board.all_white_piece_bitboard() | board.all_black_piece_bitboard();
 
-    let x = 65280u64;
-
-    let mut i = 0;
-    let mut zeroes = "".to_string();
-    while i < x.leading_zeros() {
-        zeroes += "0";
-        i += 1;
-    }
-    println!("{}{:b}", zeroes, x);
+    println!("{:b}", board_bits); // prints
 }
