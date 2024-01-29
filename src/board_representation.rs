@@ -110,11 +110,19 @@ impl Board {
 	}
 
 	// all the generated moves are for a given square. Elsewhere I would need to loop over the 64 squares and precompile this data for a lookup table
- 	fn generate_sliding_moves(&self, piece_bitboard: u64, orthagonal: bool, diagonal: bool) -> Vec<Move>{
+ 	pub fn generate_sliding_moves(&self, piece_bitboard: u64, orthagonal: bool, diagonal: bool) -> Vec<Move>{
 		let mut moves = Vec::new();
 		let is_piece_white = piece_bitboard & self.all_white_piece_bitboard() != 0; // to determine friends and enemies
-		let friendly_bitboard = if is_piece_white { self.all_white_piece_bitboard() } else { self.all_black_piece_bitboard() };
-		let enemy_bitboard = if is_piece_white { self.all_black_piece_bitboard() } else { self.all_white_piece_bitboard() };
+		let friendly_bitboard = if is_piece_white {
+			self.all_white_piece_bitboard()
+		} else { 
+			self.all_black_piece_bitboard()
+		};
+		let enemy_bitboard = if is_piece_white {
+			self.all_black_piece_bitboard()
+		} else {
+			self.all_white_piece_bitboard()
+		};
 
 		if orthagonal {
 			const ORTHAGONAL_DIRECTIONS: [i32; 4] = [1, -1, 8, -1]; // 1 is left, -1 is right, 8 is up, -8 is down
@@ -137,7 +145,11 @@ impl Board {
 		let mut attacks = 0;
 
 		for shift in 1..8 {
-			let new_square = piece_bitboard << shift * (direction as u64); // FIXME: sometimes when shifting, it overflows. This happens when we go out of bounds of the board; this in turn creates a number larger than 64 bits
+			let shift_new = shift * direction;
+			println!("{}", shift_new);
+			println!("{:b}", piece_bitboard);
+			let new_square = piece_bitboard << shift_new; // FIXME: sometimes when shifting, it overflows. This happens when we go out of bounds of the board; this in turn creates a number larger than 64 bits; BITSHIFTS DONT WORK ON NEGITAVE NUMBERS Oh my gOODNESS GRACOIs
+			println!("{:b}", new_square);
 
 			if friendly_occupency & new_square != 0 { // stop the search before adding a capture of a friendly piece
 				break;
