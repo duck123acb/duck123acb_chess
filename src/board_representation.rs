@@ -145,10 +145,7 @@ impl Board {
 		let mut attacks = 0;
 
 		for shift in 1..8 {
-			let shift_new = shift * direction;
-			println!("{}", shift_new);
-			println!("{:b}", piece_bitboard);
-			let new_square = piece_bitboard << shift_new; // FIXME: sometimes when shifting, it overflows. This happens when we go out of bounds of the board; this in turn creates a number larger than 64 bits; BITSHIFTS DONT WORK ON NEGITAVE NUMBERS Oh my gOODNESS GRACOIs
+			let new_square = piece_bitboard << shift * direction; // FIXME: sometimes when shifting, it overflows. This happens when we go out of bounds of the board; this in turn creates a number larger than 64 bits; BITSHIFTS DONT WORK ON NEGITAVE NUMBERS Oh my gOODNESS GRACOIs
 			println!("{:b}", new_square);
 
 			if friendly_occupency & new_square != 0 { // stop the search before adding a capture of a friendly piece
