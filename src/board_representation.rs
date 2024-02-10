@@ -90,6 +90,10 @@ impl Board {
 		self.bitboards[PieceType::BlackPawn as usize] | self.bitboards[PieceType::BlackRook as usize] | self.bitboards[PieceType::BlackKnight as usize] | self.bitboards[PieceType::BlackBishop as usize] | self.bitboards[PieceType::BlackQueen as usize] | self.bitboards[PieceType::BlackKing as usize]
 	}
 
+	pub fn load_fen(fen: String) {
+		// idk do something??
+	}
+
 	pub fn make_move(&self, ply: Move) {
 		/*
 		move piece on square one to square two
@@ -126,7 +130,7 @@ impl Board {
 		};
 
 		if orthagonal {
-			const ORTHAGONAL_DIRECTIONS: [i32; 4] = [1, -1, 8, -1]; // 1 is left, -1 is right, 8 is up, -8 is down
+			const ORTHAGONAL_DIRECTIONS: [i32; 4] = [1, -1, 8, -8]; // 1 is left, -1 is right, 8 is up, -8 is down
 			for &direction in &ORTHAGONAL_DIRECTIONS {
 				let attacks = self.attacks_in_a_direction(piece_bitboard, friendly_bitboard, enemy_bitboard, direction);
 				println!("{:064b}", attacks);
@@ -160,6 +164,10 @@ impl Board {
 			attacks |= new_square;
 			
 			if enemy_occupancy & new_square != 0 { // stop the search after adding a capture of an enemy piece
+				break;
+			}
+
+			if new_square & 0x8181818181818181 != 0 || new_square & 0xFF000000000000FF != 0 { // stop the search if the new square is on the edge of the board
 				break;
 			}
 		}
