@@ -113,6 +113,7 @@ impl Board {
  	pub fn generate_sliding_moves(&self, piece_bitboard: u64, orthagonal: bool, diagonal: bool) -> Vec<Move>{
 		let mut moves = Vec::new();
 		let is_piece_white = piece_bitboard & self.all_white_piece_bitboard() != 0; // to determine friends and enemies
+		println!("{}", is_piece_white);
 		let friendly_bitboard = if is_piece_white {
 			self.all_white_piece_bitboard()
 		} else { 
@@ -128,6 +129,7 @@ impl Board {
 			const ORTHAGONAL_DIRECTIONS: [i32; 4] = [1, -1, 8, -1]; // 1 is left, -1 is right, 8 is up, -8 is down
 			for &direction in &ORTHAGONAL_DIRECTIONS {
 				let attacks = self.attacks_in_a_direction(piece_bitboard, friendly_bitboard, enemy_bitboard, direction);
+				println!("{:064b}", attacks);
 				moves.extend(self.get_sliding_move_list(piece_bitboard, attacks)); // add attacks to the possible moves
 			}
 		}
@@ -148,7 +150,7 @@ impl Board {
 			let new_square = if direction > 0 {
 				piece_bitboard << shift * direction
 			} else {
-				piece_bitboard >> shift * direction
+				piece_bitboard >> shift * (direction * -1)
 			};
 
 			if friendly_occupency & new_square != 0 { // stop the search before adding a capture of a friendly piece

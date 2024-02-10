@@ -2,7 +2,7 @@ mod board_representation;
 
 fn main() {
     let board = board_representation::Board::new();
-    // println!("{:b}", board_bits);
+    println!("{:064b}", 524288u64);
 
-    board.generate_sliding_moves(0x0000000000000800, true, false);
+    board.generate_sliding_moves(524288, true, false);
 }
