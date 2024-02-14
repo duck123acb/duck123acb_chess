@@ -113,20 +113,21 @@ impl Board {
 
 	}
 
+	/* SLIDING PIECE MOVE GEN */
 	// all the generated moves are for a given square. Elsewhere I would need to loop over the 64 squares and precompile this data for a lookup table
- 	pub fn generate_sliding_moves(&self, piece_bitboard: u64, orthagonal: bool, diagonal: bool) -> Vec<Move>{
+ 	pub fn generate_sliding_moves(&self, piece_bitboard: u64, white_bitboard: u64, black_bitboard: u64, orthagonal: bool, diagonal: bool) -> Vec<Move>{
 		let mut moves = Vec::new();
-		let is_piece_white = piece_bitboard & self.all_white_piece_bitboard() != 0; // to determine friends and enemies
+		let is_piece_white = piece_bitboard & white_bitboard != 0; // to determine friends and enemies
 		println!("{}", is_piece_white);
 		let friendly_bitboard = if is_piece_white {
-			self.all_white_piece_bitboard()
+			white_bitboard
 		} else { 
-			self.all_black_piece_bitboard()
+			black_bitboard
 		};
 		let enemy_bitboard = if is_piece_white {
-			self.all_black_piece_bitboard()
+			white_bitboard
 		} else {
-			self.all_white_piece_bitboard()
+			black_bitboard
 		};
 
 		if orthagonal {
@@ -174,7 +175,7 @@ impl Board {
 
 		attacks
 	}
-	fn get_sliding_move_list(&self, piece_bitboard: u64, piece_attacks: u64) -> Vec<Move> {
+	fn get_sliding_move_list(&self, piece_bitboard: u64, piece_attacks: u64) -> Vec<Move> { // TODO: make this a lookup table parse
 		let mut temp_bitboard = piece_attacks;
 		let mut moves: Vec<Move> = vec![];
 		
