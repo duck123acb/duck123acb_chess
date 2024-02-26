@@ -1,11 +1,11 @@
-pub struct Move {
-	start_square: u64,
-	end_square: u64,
-	captured_piece: Option<PieceType>,
-	promoted_piece: Option<PieceType>,
-	en_passent: bool,
-	castling: Option<CastlingType>
-}
+// pub struct Move {
+// 	start_square: u64,
+// 	end_square: u64,
+// 	captured_piece: Option<PieceType>,
+// 	promoted_piece: Option<PieceType>,
+// 	en_passent: bool,
+// 	castling: Option<CastlingType>
+// }
 
 #[derive(Copy, Clone)]
 pub enum PieceType {
@@ -23,10 +23,10 @@ pub enum PieceType {
 	BlackKing
 }
 
-enum CastlingType {
-	Kingside,
-	Queenside
-}
+// enum CastlingType {
+// 	Kingside,
+// 	Queenside
+// }
 
 pub struct Board {
 	pub bitboards: [u64; 12],
@@ -68,28 +68,28 @@ impl Board {
 		self.bitboards[PieceType::BlackPawn as usize] | self.bitboards[PieceType::BlackRook as usize] | self.bitboards[PieceType::BlackKnight as usize] | self.bitboards[PieceType::BlackBishop as usize] | self.bitboards[PieceType::BlackQueen as usize] | self.bitboards[PieceType::BlackKing as usize]
 	}
 
-	pub fn load_fen(fen: String) {
-		// idk do something??
-	}
+	// pub fn load_fen(fen: String) {
+	// 	// idk do something??
+	// }
 
-	pub fn make_move(&self, ply: Move) {
-		/*
-		move piece on square one to square two
+	// pub fn make_move(&self, ply: Move) {
+	// 	/*
+	// 	move piece on square one to square two
 
-		if there is a piece being captured
-			remove that piece on the bitboard
+	// 	if there is a piece being captured
+	// 		remove that piece on the bitboard
 		
-		if the king is castling
-			move rook as well
+	// 	if the king is castling
+	// 		move rook as well
 
-		if the move is a promotion
-			add the promoting piece to the respective bitboard
-			remove pawn from pawn bitboard
-		 */
-	}
-	pub fn undo_move(&self, ply: Move) { // assumes that the lastest move played is the one we are undoing
+	// 	if the move is a promotion
+	// 		add the promoting piece to the respective bitboard
+	// 		remove pawn from pawn bitboard
+	// 	 */
+	// }
+	// pub fn undo_move(&self, ply: Move) { // assumes that the lastest move played is the one we are undoing
 
-	}
+	// }
 
 	/* SLIDING PIECE MOVE GEN */
 	// all the generated moves are for a given square. Elsewhere I would need to loop over the 64 squares and precompile this data for a lookup table
