@@ -22,28 +22,6 @@ pub enum PieceType {
 	BlackQueen,
 	BlackKing
 }
-impl PieceType {
-	fn iter() -> impl Iterator<Item = PieceType> {
-		// Define an array containing all enum variants
-		const PIECES: [PieceType; 12] = [
-			PieceType::WhitePawn,
-			PieceType::WhiteRook,
-			PieceType::WhiteKnight,
-			PieceType::WhiteBishop,
-			PieceType::WhiteQueen,
-			PieceType::WhiteKing,
-			PieceType::BlackPawn,
-			PieceType::BlackRook,
-			PieceType::BlackKnight,
-			PieceType::BlackBishop,
-			PieceType::BlackQueen,
-			PieceType::BlackKing
-		];
-
-		// Return an iterator over the array
-		PIECES.into_iter()
-	}
-}
 
 enum CastlingType {
 	Kingside,
