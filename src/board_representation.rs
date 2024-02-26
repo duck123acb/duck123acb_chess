@@ -115,8 +115,8 @@ impl Board {
 
 	/* SLIDING PIECE MOVE GEN */
 	// all the generated moves are for a given square. Elsewhere I would need to loop over the 64 squares and precompile this data for a lookup table
- 	pub fn generate_sliding_moves(&self, piece_bitboard: u64, white_bitboard: u64, black_bitboard: u64, orthagonal: bool, diagonal: bool) -> Vec<Move>{
-		let mut moves = Vec::new();
+ 	pub fn generate_sliding_moves(&self, piece_bitboard: u64, white_bitboard: u64, black_bitboard: u64, orthagonal: bool, diagonal: bool) -> u64{
+		let mut movement_mask = 0;
 		let is_piece_white = piece_bitboard & white_bitboard != 0; // to determine friends and enemies
 		println!("{}", is_piece_white);
 		let friendly_bitboard = if is_piece_white {
@@ -133,20 +133,17 @@ impl Board {
 		if orthagonal {
 			const ORTHAGONAL_DIRECTIONS: [i32; 4] = [1, -1, 8, -8]; // 1 is left, -1 is right, 8 is up, -8 is down
 			for &direction in &ORTHAGONAL_DIRECTIONS {
-				let attacks = self.attacks_in_a_direction(piece_bitboard, friendly_bitboard, enemy_bitboard, direction);
-				println!("{:064b}", attacks);
-				moves.extend(self.get_sliding_move_list(piece_bitboard, attacks)); // add attacks to the possible moves
+				movement_mask |= self.attacks_in_a_direction(piece_bitboard, friendly_bitboard, enemy_bitboard, direction);
 			}
 		}
 		if diagonal {
 			const DIAGONAL_DIRECTIONS: [i32; 4] = [9, -9, 7, -7]; // 7 is up-right, -7 is down-right, 9 is up-left, -9 is down-left
 			for &direction in &DIAGONAL_DIRECTIONS {
-				let attacks = self.attacks_in_a_direction(piece_bitboard, friendly_bitboard, enemy_bitboard, direction);
-				moves.extend(self.get_sliding_move_list(piece_bitboard, attacks)); // add attacks to the possible moves
+				movement_mask |= self.attacks_in_a_direction(piece_bitboard, friendly_bitboard, enemy_bitboard, direction);
 			}
 		}
 
-    moves
+    movement_mask
 	}
 	fn attacks_in_a_direction(&self, piece_bitboard: u64, friendly_occupency: u64, enemy_occupancy: u64, direction: i32) -> u64 { // returns a bitboard with all the squares it attacks
 		let mut attacks = 0;
@@ -174,33 +171,5 @@ impl Board {
 		}
 
 		attacks
-	}
-	fn get_sliding_move_list(&self, piece_bitboard: u64, piece_attacks: u64) -> Vec<Move> { // TODO: make this a lookup table parse
-		let mut temp_bitboard = piece_attacks;
-		let mut moves: Vec<Move> = vec![];
-		
-		while temp_bitboard != 0 {
-			let mut piece_move = Move {
-				start_square: piece_bitboard,
-				end_square: 1 << temp_bitboard.trailing_zeros(), // the least signifigant bit,
-				captured_piece: None,
-				promoted_piece: None,
-				en_passent: false,
-				castling: None
-			};
-
-			for piece_type in PieceType::iter() { // get captured piece
-				if self.bitboards[piece_type as usize] & piece_move.end_square != 0 { // if any piece is in the end square, it would be a capture
-					piece_move.captured_piece = Some(piece_type);
-					break;
-				}
-			}
-
-			moves.push(piece_move);
-
-			temp_bitboard &= temp_bitboard - 1; // clear the least significant bit for the next iteration
-		}
-
-		moves
 	}
 }
