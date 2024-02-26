@@ -1,3 +1,5 @@
+// TODO: magic bitboards
+
 // pub struct Move {
 // 	start_square: u64,
 // 	end_square: u64,
