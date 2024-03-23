@@ -1,4 +1,6 @@
 mod board_representation;
+mod evaluate;
+mod move_search;
 
 fn main() {
     let board = board_representation::Board::new();
