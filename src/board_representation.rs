@@ -1,3 +1,4 @@
+// TODO: make everything in the move gen code to have more parameters be passed in instead of determining it on its own || have fen/zoberist hashing exist
 // TODO: magic bitboards
 
 // pub struct Move {
